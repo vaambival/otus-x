@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-schema
+      author: kurov
+      changes:
+        - sql:
+            dbms: 'postgresql'
+            sql: CREATE SCHEMA IF NOT EXISTS otus_x;
+
+  - changeSet:
+      id: 02-create-table-user
+      author: kurov
+      changes:
+        - createTable:
+            tableName: authors
+            schemaName: otus_x
+            remarks: Таблица авторов (пользователей) социальной сети
+            columns:
+              - column:
+                  name: uuid
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar
+              - column:
+                  name: birthdate
+                  type: date
+              - column:
+                  name: sex
+                  type: varchar
+                  constraints:
+                    checkConstraint: IN (man, woman, other)
+              - column:
+                  name: interests
+                  type: nvarchar
+              - column:
+                  name: city
+                  type: varchar
