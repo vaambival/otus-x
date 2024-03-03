@@ -23,7 +23,7 @@ public class UserDao {
     private static final String INSERT_AUTHOR = "INSERT INTO otus_x.authors (uuid, name, surname, birthDate, sex, interests," +
             " city, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_BY_NAMES = "SELECT uuid, name, surname, birthDate, sex, interests, city " +
-            "FROM otus_x.authors WHERE name LIKE ? AND surname LIKE ?";
+            "FROM otus_x.authors WHERE surname LIKE ? AND name LIKE ?";
     private static final String LIKE_PERCENT = "%";
     private final JdbcTemplate jdbcTemplate;
 
@@ -71,7 +71,7 @@ public class UserDao {
     }
 
     public List<User> findByPrefixNames(String name, String surname) {
-        return jdbcTemplate.query(FIND_BY_NAMES, userRowMapper(), name + LIKE_PERCENT, surname + LIKE_PERCENT);
+        return jdbcTemplate.query(FIND_BY_NAMES, userRowMapper(), surname + LIKE_PERCENT, name + LIKE_PERCENT);
     }
 
     private RowMapper<User> userRowMapper() {
