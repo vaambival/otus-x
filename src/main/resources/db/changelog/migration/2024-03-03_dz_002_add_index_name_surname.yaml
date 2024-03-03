@@ -1,0 +1,16 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: add-name-surname-index
+      author: kurov
+      changes:
+        - createIndex:
+            schemaName: otus_x
+            tableName: authors
+            remarks: Добавить индекс для префиксного поиска по имени и фамилии
+            columns:
+              - column:
+                  name: surname
+              - column:
+                  name: name
+            indexName: surname_name_index
