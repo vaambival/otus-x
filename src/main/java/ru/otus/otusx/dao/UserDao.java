@@ -3,11 +3,15 @@ package ru.otus.otusx.dao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.otus.otusx.dao.entity.User;
 import ru.otus.otusx.logic.exception.NotSaveException;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,6 +22,9 @@ public class UserDao {
             "password FROM otus_x.authors WHERE uuid=?";
     private static final String INSERT_AUTHOR = "INSERT INTO otus_x.authors (uuid, name, surname, birthDate, sex, interests," +
             " city, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String FIND_BY_NAMES = "SELECT uuid, name, surname, birthDate, sex, interests, city " +
+            "FROM otus_x.authors WHERE surname LIKE ? AND name LIKE ?";
+    private static final String LIKE_PERCENT = "%";
     private final JdbcTemplate jdbcTemplate;
 
     public Optional<User> findByUuid(UUID uuid) {
@@ -27,19 +34,23 @@ public class UserDao {
     private ResultSetExtractor<User> userResultSetExtractor() {
         return rs -> {
             if (rs.next()) {
-                return new User()
-                        .setUuid(rs.getObject("uuid", UUID.class))
-                        .setName(rs.getString("name"))
-                        .setSurname(rs.getString("surname"))
-                        .setBirthDate(rs.getObject("birthDate", LocalDate.class))
-                        .setSex(rs.getString("sex"))
-                        .setInterests(rs.getString("interests"))
-                        .setCity(rs.getString("city"))
+                return userFromResultSet(rs)
                         .setPassword(rs.getString("password"));
             } else {
                 return null;
             }
         };
+    }
+
+    private User userFromResultSet(ResultSet rs) throws SQLException {
+        return new User()
+                .setUuid(rs.getObject("uuid", UUID.class))
+                .setName(rs.getString("name"))
+                .setSurname(rs.getString("surname"))
+                .setBirthDate(rs.getObject("birthDate", LocalDate.class))
+                .setSex(rs.getString("sex"))
+                .setInterests(rs.getString("interests"))
+                .setCity(rs.getString("city"));
     }
 
     public UUID save(User user) {
@@ -57,5 +68,13 @@ public class UserDao {
             throw new NotSaveException();
         }
         return user.getUuid();
+    }
+
+    public List<User> findByPrefixNames(String name, String surname) {
+        return jdbcTemplate.query(FIND_BY_NAMES, userRowMapper(), surname + LIKE_PERCENT, name + LIKE_PERCENT);
+    }
+
+    private RowMapper<User> userRowMapper() {
+        return (rs, rowNum) -> userFromResultSet(rs);
     }
 }

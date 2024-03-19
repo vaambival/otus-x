@@ -10,6 +10,7 @@ import ru.otus.otusx.logic.exception.NotFoundException;
 import ru.otus.otusx.logic.mapper.UserMapper;
 import ru.otus.otusx.logic.service.UserService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,5 +36,11 @@ public class UserServiceImpl implements UserService {
                 .setPassword(encoder.encode(request.getPassword()))
                 .setUuid(UUID.randomUUID());
         return userDao.save(user);
+    }
+
+    @Override
+    public List<UserDto> search(String name, String surname) {
+        var users = userDao.findByPrefixNames(name, surname);
+        return userMapper.toDtos(users);
     }
 }

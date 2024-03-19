@@ -6,6 +6,9 @@ import ru.otus.otusx.dao.entity.User;
 import ru.otus.otusx.logic.dto.UserDto;
 import ru.otus.otusx.logic.dto.request.UserRegistrationRequest;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UserMapper {
 
@@ -17,5 +20,12 @@ public class UserMapper {
 
     public User toEntity(UserRegistrationRequest request) {
         return mapper.map(request, User.class);
+    }
+
+    public List<UserDto> toDtos(List<User> users) {
+        return users
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 }
