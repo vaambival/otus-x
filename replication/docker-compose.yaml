@@ -1,0 +1,38 @@
+services:
+  postgresql-leader:
+    image: postgres:alpine3.18
+    restart: no
+    volumes:
+      - /data/master:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: otus_x
+      POSTGRES_DB: otus_x
+      POSTGRES_USER: otus_x
+    networks:
+      - otus-x-db
+    ports:
+      - 5432:5432
+  postgresql-follower-01:
+    image: postgres:alpine3.18
+    restart: always
+    volumes:
+      - /data/follower-01:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: otus_x
+      POSTGRES_DB: otus_x
+      POSTGRES_USER: otus_x
+    networks:
+      - otus-x-db
+  postgresql-follower-02:
+    image: postgres:alpine3.18
+    restart: always
+    volumes:
+      - /data/follower-02:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: otus_x
+      POSTGRES_DB: otus_x
+      POSTGRES_USER: otus_x
+    networks:
+      - otus-x-db
+networks:
+  otus-x-db:
