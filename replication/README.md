@@ -2,22 +2,27 @@
 
 ## Преднастройки
 
-Перед запуском необходимо установить на рабочей машине [Docker](https://docs.docker.com/engine/install/). 
-
-Для первого запуска необходимо создать директории, указанные в [docker-compose](docker-compose.yaml):
-[data/master](data/master), [data/follower-01](data/follower-01), [data/follower-02](data/follower-02).
-Данные директории добавлены в [.gitignore](../.gitignore). Они необходимы для монтирования каталогов данных БД для
-последующих запусков.
+Перед запуском необходимо установить на рабочей машине [Docker](https://docs.docker.com/engine/install/).
 
 Чтобы запустить ведущий узел БД и два ведомых необходимо в терминале в 
 текущей директории [replication](.) выполнить команду: 
 ```
-docker compose up
+docker compose up -d --scale postgresql-leader=1 --scale postgresql-follower=2
 ```
 
 ### Тестовые данные
 
+Для создания схемы данных необходимо запустить текущий проект c настройками 
+подключения к БД PostgreSQL из [application.yaml](../src/main/resources/application.yaml):
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5431/otus_x
+```
+
 Для заполнения экземпляров БД можно выполнить код из [генератора](https://github.com/vaambival/otus-x-generator).
-Инструкция в репозитории имеется.
+Инструкция в репозитории имеется. После настройки репликации, указанные изменения
+применятся к ведомым узлам.
 
 ## Настройка репликации
+

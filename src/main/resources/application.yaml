@@ -4,7 +4,7 @@ spring:
   datasource:
     platform: postgres
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/otus_x
+    url: jdbc:postgresql://localhost:5431/otus_x
     username: otus_x
     password: otus_x
   liquibase:
