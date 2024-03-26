@@ -2,14 +2,21 @@ server:
   port: 8080
 spring:
   datasource:
-    platform: postgres
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5431/otus_x
-    username: otus_x
-    password: otus_x
-  liquibase:
-    changeLog: "classpath:db/changelog/changelog.xml"
-    default-schema: "public"
+    write:
+      platform: postgres
+      driverClassName: org.postgresql.Driver
+      url: jdbc:postgresql://localhost:5431/otus_x
+      username: otus_x
+      password: otus_x
+      liquibase:
+        changeLog: "classpath:db/changelog/changelog.xml"
+        default-schema: "public"
+    read:
+      platform: postgres
+      driverClassName: org.postgresql.Driver
+      url: jdbc:postgresql://localhost:49789/otus_x
+      username: otus_x
+      password: otus_x
 otus-x:
   token:
     key: b3R1c194X3NlY3JldF9rZXlfZm9yX2p3dC1vdHVzLWhvbWV0YXNrLTAxLXNob3VsZC1iZS1kb25l
