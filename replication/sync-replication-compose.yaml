@@ -14,6 +14,7 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
       - POSTGRESQL_SYNCHRONOUS_COMMIT_MODE=on
       - POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS=2
+      - POSTGRESQL_DATA_DIR=/bitnami/postgresql/data
   postgresql-follower-01:
     image: docker.io/bitnami/postgresql:16
     ports:
@@ -28,6 +29,7 @@ services:
       - POSTGRESQL_PASSWORD=my_password
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
       - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_DATA_DIR=/bitnami/postgresql/data
   postgresql-follower-02:
     image: docker.io/bitnami/postgresql:16
     ports:
@@ -42,3 +44,4 @@ services:
       - POSTGRESQL_PASSWORD=my_password
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
       - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_DATA_DIR=/bitnami/postgresql/data
