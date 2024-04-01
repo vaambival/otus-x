@@ -1,6 +1,7 @@
 package ru.otus.otusx.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,10 +26,13 @@ public class UserDao {
     private static final String FIND_BY_NAMES = "SELECT uuid, name, surname, birthDate, sex, interests, city " +
             "FROM otus_x.authors WHERE surname LIKE ? AND name LIKE ?";
     private static final String LIKE_PERCENT = "%";
-    private final JdbcTemplate jdbcTemplate;
+    @Qualifier("writeJdbcTemplate")
+    private final JdbcTemplate writeJdbcTemplate;
+    @Qualifier("readJdbcTemplate")
+    private final JdbcTemplate readJdbcTemplate;
 
     public Optional<User> findByUuid(UUID uuid) {
-        return Optional.ofNullable(jdbcTemplate.query(FIND_BY_UUID, userResultSetExtractor(), uuid));
+        return Optional.ofNullable(readJdbcTemplate.query(FIND_BY_UUID, userResultSetExtractor(), uuid));
     }
 
     private ResultSetExtractor<User> userResultSetExtractor() {
@@ -54,7 +58,7 @@ public class UserDao {
     }
 
     public UUID save(User user) {
-        var rows = jdbcTemplate.update(INSERT_AUTHOR, statement -> {
+        var rows = writeJdbcTemplate.update(INSERT_AUTHOR, statement -> {
             statement.setObject(1, user.getUuid());
             statement.setString(2, user.getName());
             statement.setString(3, user.getSurname());
@@ -71,7 +75,7 @@ public class UserDao {
     }
 
     public List<User> findByPrefixNames(String name, String surname) {
-        return jdbcTemplate.query(FIND_BY_NAMES, userRowMapper(), surname + LIKE_PERCENT, name + LIKE_PERCENT);
+        return readJdbcTemplate.query(FIND_BY_NAMES, userRowMapper(), surname + LIKE_PERCENT, name + LIKE_PERCENT);
     }
 
     private RowMapper<User> userRowMapper() {
