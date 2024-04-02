@@ -57,7 +57,7 @@ public class JwtServiceImpl implements JwtService {
                 .claims(claims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredInMinutes * 1_000))
+                .expiration(new Date(System.currentTimeMillis() + expiredInMinutes * 60_000))
                 .signWith(getSignIn(), Jwts.SIG.HS256).compact();
     }
 
