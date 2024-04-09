@@ -1,6 +1,8 @@
 server:
   port: 8080
 spring:
+  application:
+    name: otus-x
   datasource:
     write:
       platform: postgres
@@ -21,3 +23,7 @@ otus-x:
   token:
     key: b3R1c194X3NlY3JldF9rZXlfZm9yX2p3dC1vdHVzLWhvbWV0YXNrLTAxLXNob3VsZC1iZS1kb25l
     expiration-in-minutes: 1440
+management:
+  tracing:
+    sampling:
+      probability: 1.0
