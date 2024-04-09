@@ -14,7 +14,7 @@ spring:
     read:
       platform: postgres
       driverClassName: org.postgresql.Driver
-      url: jdbc:postgresql://localhost:49789/otus_x
+      url: jdbc:postgresql://localhost:63748/otus_x
       username: otus_x
       password: otus_x
 otus-x:

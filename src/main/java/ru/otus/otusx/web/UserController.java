@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.otusx.logic.dto.request.UserRegistrationRequest;
-import ru.otus.otusx.logic.service.UserService;
 import ru.otus.otusx.logic.dto.UserDto;
+import ru.otus.otusx.logic.dto.request.UserRegistrationRequest;
+import ru.otus.otusx.logic.service.UserSecurityService;
+import ru.otus.otusx.logic.service.UserService;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final UserSecurityService userSecurityService;
 
     @GetMapping("/get/{id}")
     public UserDto getUser(@PathVariable(name = "id") UUID uuid) {
@@ -36,5 +38,10 @@ public class UserController {
     @GetMapping("/search")
     public List<UserDto> search(@RequestParam("first_name") String name, @RequestParam("last_name") String surname) {
         return userService.search(name, surname);
+    }
+
+    @GetMapping
+    public UUID getUser() {
+        return userSecurityService.getUuid();
     }
 }
