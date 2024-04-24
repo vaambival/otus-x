@@ -16,9 +16,23 @@ spring:
     read:
       platform: postgres
       driverClassName: org.postgresql.Driver
-      url: jdbc:postgresql://localhost:63748/otus_x
+      url: jdbc:postgresql://localhost:62277/otus_x
       username: otus_x
       password: otus_x
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rabbit
+    password: rabbit
+  scheduler:
+    newsfeed-rate: 3600000
+rabbitmq:
+  exchange: newsfeed
+  queue: newsfeed
 otus-x:
   token:
     key: b3R1c194X3NlY3JldF9rZXlfZm9yX2p3dC1vdHVzLWhvbWV0YXNrLTAxLXNob3VsZC1iZS1kb25l

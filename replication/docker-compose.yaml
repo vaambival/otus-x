@@ -17,7 +17,7 @@ services:
   postgresql-follower:
     image: docker.io/bitnami/postgresql:16
     ports:
-      - '5432'
+      - "62277:5432"
     depends_on:
       - postgresql-leader
     environment:
@@ -28,6 +28,18 @@ services:
       - POSTGRESQL_PASSWORD=my_password
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
       - ALLOW_EMPTY_PASSWORD=yes
+  redis:
+    image: redis:7.2.4
+    ports:
+      - "6379:6379"
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit
+      - RABBITMQ_DEFAULT_PASS=rabbit
+    ports:
+      - "15672:15672"
+      - "5672:5672"
 volumes:
   postgresql_master_data:
     driver: local
