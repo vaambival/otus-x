@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-follower-table
+      author: kurov
+      changes:
+        - createTable:
+            tableName: followers
+            schemaName: otus_x
+            remarks: Таблица подписок социальной сети
+            columns:
+              - column:
+                  name: follower_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: follower_fk
+                    referencedTableSchemaName: otus_x
+                    referencedTableName: authors
+                    referencedColumnNames: uuid
+                    primaryKey: true
+                    primaryKeyName: pk_followers
+              - column:
+                  name: followee_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: followee_fk
+                    referencedTableSchemaName: otus_x
+                    referencedTableName: authors
+                    referencedColumnNames: uuid
+                    primaryKey: true
+                    primaryKeyName: pk_followers

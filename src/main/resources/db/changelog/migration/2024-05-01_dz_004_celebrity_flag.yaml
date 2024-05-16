@@ -1,0 +1,17 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: add-author-celebrity-column
+      author: kurov
+      changes:
+        - addColumn:
+            schemaName: otus_x
+            tableName: authors
+            remarks: Добавить столбец признака знаменитости в таблицу пользователей
+            columns:
+              - column:
+                  name: celebrity
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

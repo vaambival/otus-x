@@ -6,7 +6,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import ru.otus.otusx.dao.exception.AlreadyFollowException;
+import ru.otus.otusx.dao.exception.FolloweeNotExistException;
 import ru.otus.otusx.logic.exception.ApplicationError;
+import ru.otus.otusx.logic.exception.FollowerException;
 import ru.otus.otusx.logic.exception.NotFoundException;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -33,6 +36,21 @@ public class ControllerAdvisor {
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApplicationError> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException exc) {
+        return ResponseEntity.status(BAD_REQUEST).body(new ApplicationError(exc));
+    }
+
+    @ExceptionHandler(value = AlreadyFollowException.class)
+    public ResponseEntity<ApplicationError> handleAlreadyFollowException(AlreadyFollowException exc) {
+        return ResponseEntity.status(BAD_REQUEST).body(new ApplicationError(exc));
+    }
+
+    @ExceptionHandler(value = FolloweeNotExistException.class)
+    public ResponseEntity<ApplicationError> handleFollowerNotExistException(FolloweeNotExistException exc) {
+        return ResponseEntity.status(BAD_REQUEST).body(new ApplicationError(exc));
+    }
+
+    @ExceptionHandler(value = FollowerException.class)
+    public ResponseEntity<ApplicationError> handleFollowerException(FollowerException exc) {
         return ResponseEntity.status(BAD_REQUEST).body(new ApplicationError(exc));
     }
 }

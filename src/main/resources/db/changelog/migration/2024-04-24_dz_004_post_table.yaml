@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-post-table
+      author: kurov
+      changes:
+        - createTable:
+            tableName: posts
+            schemaName: otus_x
+            remarks: Таблица постов социальной сети
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_posts
+              - column:
+                  name: text
+                  type: nvarchar(140)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_post_author
+                    referencedTableSchemaName: otus_x
+                    referencedTableName: authors
+                    referencedColumnNames: uuid
+              - column:
+                  name: created
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: datetime
+                  constraints:
+                    nullable: false

@@ -1,0 +1,14 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: add-created-index
+      author: kurov
+      changes:
+        - createIndex:
+            schemaName: otus_x
+            tableName: posts
+            remarks: Добавить индекс для поиска и сортировки постов по дате создания
+            columns:
+              - column:
+                  name: created
+            indexName: post_created_index

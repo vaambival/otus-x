@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.otus.otusx.dao.entity.User;
-import ru.otus.otusx.logic.exception.NotSaveException;
+import ru.otus.otusx.dao.exception.NotSaveException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,6 +26,8 @@ public class UserDao {
             " city, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_BY_NAMES = "SELECT uuid, name, surname, birthDate, sex, interests, city " +
             "FROM otus_x.authors WHERE surname LIKE ? AND name LIKE ?";
+    private static final String FIND_ALL_UUIDS = "SELECT uuid FROM otus_x.authors";
+    private static final String IS_CELEBRITY = "SELECT celebrity FROM otus_x.authors WHERE uuid=?";
     private static final String LIKE_PERCENT = "%";
     @Qualifier("writeJdbcTemplate")
     private final JdbcTemplate writeJdbcTemplate;
@@ -80,5 +83,13 @@ public class UserDao {
 
     private RowMapper<User> userRowMapper() {
         return (rs, rowNum) -> userFromResultSet(rs);
+    }
+
+    public boolean isCelebrity(UUID uuid) {
+        return Boolean.TRUE.equals(readJdbcTemplate.queryForObject(IS_CELEBRITY, Boolean.class, uuid));
+    }
+
+    public Stream<UUID> findAllUuids() {
+        return readJdbcTemplate.queryForStream(FIND_ALL_UUIDS, (rs, num) -> rs.getObject("uuid", UUID.class));
     }
 }
