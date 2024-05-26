@@ -9,6 +9,7 @@ import ru.otus.otusx.dao.FeedCacheDao;
 import ru.otus.otusx.dao.FollowerDao;
 import ru.otus.otusx.dao.UserDao;
 import ru.otus.otusx.dao.entity.Post;
+import ru.otus.otusx.logic.dto.message.PostDto;
 import ru.otus.otusx.logic.service.NewsFeedService;
 import ru.otus.otusx.messaging.NewsfeedProducer;
 import ru.otus.otusx.messaging.message.NewsfeedMessage;
@@ -32,7 +33,9 @@ public class NewsFeedServiceImpl implements NewsFeedService {
         if (userDao.isCelebrity(author)) {
             return;
         }
-        newsfeedProducer.sendNews(new NewsfeedMessage(followerDao.findAllFollowers(author), post, false));
+        var followers = followerDao.findAllFollowers(author);
+        newsfeedProducer.sendNews(new NewsfeedMessage(followers, post, false));
+        newsfeedProducer.sendNotifications(new PostDto(post, followers));
     }
 
     @Override
