@@ -40,6 +40,23 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+      - "61613:61613"
+    volumes:
+      - "./rabbit_enabled_plugins:/etc/rabbitmq/enabled_plugins"
+  user-service:
+    image: kurov1993/otus-x:0.3
+    depends_on:
+      - postgresql-follower
+      - rabbitmq
+      - redis
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_WRITE_URL: jdbc:postgresql://leader:5432/otus_x
+      SPRING_DATASOURCE_READ_URL: jdbc:postgresql://postgresql-follower:5432/otus_x
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_RABBITMQ_HOST: rabbitmq
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 volumes:
   postgresql_master_data:
     driver: local
